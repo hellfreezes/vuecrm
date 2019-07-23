@@ -37,21 +37,21 @@
         >Пароль не может быть короче {{ $v.password.$params.minLength.min }} символов</small>
       </div>
       <div class="input-field">
-        <input 
-          id="name" 
-          type="text" 
+        <input
+          id="name"
+          type="text"
           v-model.trim="name"
           :class="{invalid: ($v.name.$dirty && !$v.name.required)}"
         />
         <label for="name">Имя</label>
-        <small 
+        <small
           class="helper-text invalid"
           v-if="$v.name.$dirty && !$v.name.required"
         >Введите Ваше имя</small>
       </div>
       <p>
         <label>
-          <input type="checkbox" v-model="agree"/>
+          <input type="checkbox" v-model="agree" />
           <span>С правилами согласен</span>
         </label>
       </p>
@@ -73,11 +73,11 @@
 </template>
 
 <script>
-import {email, required, minLength} from "vuelidate/lib/validators";
+import { email, required, minLength } from "vuelidate/lib/validators";
 //import { constants } from 'crypto';
 
 export default {
-  name: 'register',
+  name: "register",
   data: () => ({
     email: "",
     password: "",
@@ -85,17 +85,17 @@ export default {
     agree: false
   }),
   validations: {
-    email: {email, required},
-    password: {required, minLength: minLength(8)},
+    email: { email, required },
+    password: { required, minLength: minLength(8) },
     name: { required },
     agree: { checked: v => v }
   },
   methods: {
-    submitHandler() {
+    async submitHandler() {
       if (this.$v.$invalid) {
         this.$v.$touch();
         return;
-      };
+      }
 
       const formData = {
         email: this.email,
@@ -103,10 +103,11 @@ export default {
         name: this.name
       };
 
-      console.log(formData);
-
-      this.$router.push("/");
+      try {
+        await this.$store.dispatch("register", formData);
+        this.$router.push("/");
+      } catch(e) {}
     }
   }
-}
+};
 </script>

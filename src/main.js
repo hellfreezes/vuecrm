@@ -26,11 +26,9 @@ firebase.initializeApp({
   messagingSenderId: "325474589643",
   appId: "1:325474589643:web:cbcddb3e9f9d6e20"
 });
-
 let app;
-
 // Если бэкэнд не используется, то вынести создание нового Vue за пределы колбэка
-firebase.auth().onAuthStateChanged(()=>{
+firebase.auth().onAuthStateChanged(() => {
   if (!app) {
     app = new Vue({
       router,

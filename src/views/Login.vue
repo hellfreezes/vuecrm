@@ -3,35 +3,35 @@
     <div class="card-content">
       <span class="card-title">Домашняя бухгалтерия</span>
       <div class="input-field">
-        <input 
-          id="email" 
-          type="text" 
-          v-model.trim="email" 
+        <input
+          id="email"
+          type="text"
+          v-model.trim="email"
           :class="{invalid: ($v.email.$dirty && !$v.email.required) || ($v.email.$dirty && !$v.email.email)}"
         />
         <label for="email">Email</label>
-        <small 
+        <small
           class="helper-text invalid"
           v-if="$v.email.$dirty && !$v.email.required"
         >Поле email не может быть пустым</small>
-        <small 
+        <small
           class="helper-text invalid"
           v-if="$v.email.$dirty && !$v.email.email"
         >Введите корректный email</small>
       </div>
       <div class="input-field">
-        <input 
-          id="password" 
+        <input
+          id="password"
           type="password"
-          v-model.trim="password" 
+          v-model.trim="password"
           :class="{invalid: ($v.password.$dirty && !$v.password.required) || ($v.password.$dirty && !$v.password.minLength)}"
         />
         <label for="password">Пароль</label>
-        <small 
+        <small
           class="helper-text invalid"
           v-if="$v.password.$dirty && !$v.password.required"
         >Поле Password должно быть заполнено</small>
-        <small 
+        <small
           class="helper-text invalid"
           v-if="$v.password.$dirty && !$v.password.minLength"
         >Пароль не может быть короче {{$v.password.$params.minLength.min}} символов</small>
@@ -54,12 +54,12 @@
 </template>
 
 <script>
-import {email, required, minLength} from "vuelidate/lib/validators";
+import { email, required, minLength } from "vuelidate/lib/validators";
 import messages from "@/utils/messages";
-import { debuglog } from 'util';
+import { debuglog } from "util";
 
 export default {
-  name: 'login',
+  name: "login",
   data: () => ({
     email: "",
     password: ""
@@ -70,15 +70,15 @@ export default {
     }
   },
   validations: {
-    email: {email, required},
-    password: {required, minLength: minLength(8)}
+    email: { email, required },
+    password: { required, minLength: minLength(8) }
   },
   methods: {
     async submitHandler() {
       if (this.$v.$invalid) {
         this.$v.$touch();
         return;
-      };
+      }
 
       const formData = {
         email: this.email,
@@ -88,11 +88,8 @@ export default {
       try {
         await this.$store.dispatch("login", formData);
         this.$router.push("/");
-      }
-      catch(e) {
-        
-      }
+      } catch (e) {}
     }
   }
-}
+};
 </script>
