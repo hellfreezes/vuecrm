@@ -28,7 +28,7 @@ export default {
           name 
         });
       } catch(e) {
-        //console.log("E:", e);
+
         commit("setError", e);
         throw e;
       }
