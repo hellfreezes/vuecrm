@@ -6,17 +6,29 @@ export default {
       try {
         const uid = await dispatch("getUid");
         const categories = (await firebase.database().ref(`/users/${uid}/categories`).once("value")).val() || {};
-        const cats = [];
-        Object.keys(categories).forEach(key => {
-          cats.push({
-            title: categories[key].title,
-            limit: categories[key].limit,
-            id: key
-          });
-        });
-        return cats;
+        // const cats = [];
+        // Object.keys(categories).forEach(key => {
+        //   cats.push({
+        //     title: categories[key].title,
+        //     limit: categories[key].limit,
+        //     id: key
+        //   });
+        // });
+        // return cats;
+        // Выше представлен более длинный но более понятный код
+        return Object.keys(categories).map(key => ({...categories[key], id: key}));        
       }
       catch(e) {
+        // Мутации в тч setError хранятся в index.js
+        commit("setError", e);
+        throw e;
+      }
+    },
+    async updateCategory({ commit, dispatch }, { id, title, limit }) {
+      try {
+        const uid = await dispatch("getUid");
+        await firebase.database().ref(`/users/${uid}/categories`).child(id).update({ title, limit });
+      } catch(e) {
         // Мутации в тч setError хранятся в index.js
         commit("setError", e);
         throw e;
