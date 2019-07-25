@@ -60,7 +60,7 @@
 
 <script>
 import { required, minValue } from "vuelidate/lib/validators";
-import { constants } from 'crypto';
+
 export default {
   data: () => ({
     select: null,
