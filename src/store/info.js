@@ -20,7 +20,22 @@ export default {
         commit("setInfo", info);
       }
       catch(e) {
-
+        commit("setError", e);
+        throw e;
+      }
+    },
+    async updateInfo({dispatch, commit, getters}, toUpdate) {
+      try {
+        const uid = await dispatch("getUid");
+        // похоже что ... эквивалентно перечислению всего содержимого объекта info, а ... у toUpdate развернет также этот объект и заменит значения у info.
+        // таким образом произойдет слияние info и toUpdate с приоритетом у toUpdate
+        const updateData = {...getters.info, ...toUpdate};
+        await firebase.database().ref(`/users/${uid}/info`).update(toUpdate);
+        commit("setInfo", updateData);
+      }
+      catch(e) {
+        commit("setError", e);
+        throw e;
       }
     }
   },
